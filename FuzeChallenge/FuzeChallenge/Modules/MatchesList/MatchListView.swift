@@ -45,12 +45,14 @@ struct TeamView: View {
 
 	var body: some View {
 		VStack(alignment: .center, spacing: 10) {
-			AsyncImage(url: URL(string: "https://cdn.pandascore.co/images/league/image/4554/Liga_Gamers_Club_SSrie_A_logo.png")) { phase in
+			AsyncImage(url: viewModel.image) { phase in
 				switch phase {
+				case .empty:
+					EmptyView()
 				case .failure:
 					Text("Error loading image")
 				case .success(let image):
-					image.resizable(resizingMode: .stretch)
+					image.resizable()
 				default:
 					ProgressView()
 				}
