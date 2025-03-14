@@ -1,3 +1,40 @@
+//
+
+import SwiftUI
+
+struct MatchView: View {
+	private var viewModel: MatchViewModel
+
+	init(viewModel: MatchViewModel) {
+		self.viewModel = viewModel
+	}
+
+	var body: some View {
+		VStack(alignment: .center, spacing: 0) {
+			MatchStatusView()
+			HStack(alignment: .center) {
+				Spacer()
+				TeamView(viewModel: viewModel.firstOpponent)
+				Spacer(minLength: 20)
+				Text("VS")
+					.font(.system(size: 12.0))
+					.foregroundStyle(Color(white: 1.0, opacity: 0.5))
+				Spacer(minLength: 20)
+				TeamView(viewModel: viewModel.secondOpponent)
+				Spacer()
+			}
+			Divider()
+				.background(Color(white: 1, opacity: 0.2))
+			HStack() {
+				LeagueInfoView(leagueName: viewModel.leagueSerie, leagueImageURL: viewModel.leagueImage)
+				Spacer()
+			}
+		}
+		.background(Color(red: 39/255, green: 38/255, blue: 57/255))
+		.cornerRadius(16)
+	}
+}
+
 struct LeagueInfoView: View {
 	private let leagueName: String
 	private let leagueImageURL: URL?
