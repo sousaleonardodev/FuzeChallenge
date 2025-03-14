@@ -3,7 +3,7 @@
 import SwiftUI
 import Combine
 
-class OpponentViewModel: ObservableObject, Identifiable {
+class TeamViewModel: ObservableObject, Identifiable {
 	@Published var name: String = ""
 	@Published var image: URL?
 
@@ -16,8 +16,8 @@ class OpponentViewModel: ObservableObject, Identifiable {
 class MatchViewModel: ObservableObject, Identifiable {
 	@Published var leagueSerie: String
 	@Published var leagueImage: URL?
-	@Published var firstOpponent: OpponentViewModel
-	@Published var secondOpponent: OpponentViewModel
+	@Published var firstOpponent: TeamViewModel
+	@Published var secondOpponent: TeamViewModel
 	@Published var matchStatus: String
 
 	init(_ match: MatchResponse) {
@@ -26,8 +26,8 @@ class MatchViewModel: ObservableObject, Identifiable {
 		leagueImage = match.leagueImageUrl
 
 		//TODO: Add validation
-		firstOpponent = OpponentViewModel(match.opponents[0])
-		secondOpponent = OpponentViewModel(match.opponents[1])
+		firstOpponent = TeamViewModel(match.opponents[0])
+		secondOpponent = TeamViewModel(match.opponents[1])
 
 		//TODO: Set default status or filter null ones
 		matchStatus = match.status?.rawValue ?? "Unknown"
