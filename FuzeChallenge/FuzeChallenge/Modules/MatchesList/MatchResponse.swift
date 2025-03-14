@@ -7,12 +7,14 @@ struct MatchResponse: Decodable {
 	let leagueName: String
 	let serieName: String
 	let opponents: [MatchOponentResponse]
+	let status: MatchStatus?
 
 	private enum RootKeys: String, CodingKey {
 		case id
 		case league
 		case serie
 		case opponents
+		case status
 	}
 
 	private enum LeagueKeys: String, CodingKey {
@@ -26,6 +28,7 @@ struct MatchResponse: Decodable {
 	init(from decoder: any Decoder) throws {
 		let container = try decoder.container(keyedBy: RootKeys.self)
 		id = try container.decode(Int.self, forKey: .id)
+		status = try? container.decode(MatchStatus.self, forKey: .status)
 
 		let leagueContainer = try container.nestedContainer(keyedBy: LeagueKeys.self, forKey: .league)
 		leagueName = try leagueContainer.decode(String.self, forKey: .name)
@@ -62,11 +65,7 @@ struct MatchOponentResponse: Decodable {
 	}
 }
 
-struct MatchStatusResponse: Decodable {
-	let status: String
-}
-
-enum MatchStatus: String {
+enum MatchStatus: String, Decodable {
 	case notStarted = "not_started"
 	case started = "running"
 }
