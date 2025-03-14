@@ -11,7 +11,10 @@ struct MatchView: View {
 
 	var body: some View {
 		VStack(alignment: .center, spacing: 0) {
-			MatchStatusView()
+			HStack() {
+				Spacer()
+				MatchStatusView(status: viewModel.matchStatus)
+			}
 			HStack(alignment: .center) {
 				Spacer()
 				TeamView(viewModel: viewModel.firstOpponent)
