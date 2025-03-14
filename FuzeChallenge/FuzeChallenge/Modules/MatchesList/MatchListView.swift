@@ -35,6 +35,7 @@ struct MatchView: View {
 		}
 		.background(Color(red: 39/255, green: 38/255, blue: 57/255))
 		.cornerRadius(16)
+		.listRowBackground(Color.clear)
 	}
 }
 
@@ -109,6 +110,7 @@ struct TeamView: View {
 		.padding(.init(top: 18.5, leading: 0, bottom: 18.5, trailing: 0))
 	}
 }
+
 struct MatchStatusView: View {
 	private let status: String
 
@@ -134,4 +136,30 @@ struct MatchStatusView: View {
 
 #Preview {
 	MatchStatusView(status: "AGORA")
+}
+
+struct MatchListView: View {
+	@ObservedObject var viewModel: MatchListViewModel
+
+	var body: some View {
+		NavigationStack {
+			List(viewModel.datasource) { viewModel in
+				MatchView(viewModel: viewModel)
+					.listRowSeparator(.hidden)
+			}
+			.listRowBackground(Color.red)
+			.background(Color.darkPurple)
+			.listRowSpacing(12)
+			.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+			.listStyle(.plain)
+			.refreshable {
+				viewModel.fetchMatches()
+			}
+			.navigationTitle(Text("Partidas"))
+		}
+	}
+
+	init(viewModel: MatchListViewModel) {
+		self.viewModel = viewModel
+	}
 }
