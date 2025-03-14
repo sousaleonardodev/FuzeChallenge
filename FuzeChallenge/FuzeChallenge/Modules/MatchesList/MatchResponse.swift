@@ -7,7 +7,7 @@ struct MatchResponse: Decodable {
 	let leagueName: String
 	let leagueImageUrl: URL?
 	let serieName: String
-	let opponents: [MatchOpponentResponse]
+	let opponents: [MatchTeamResponse]
 	let status: MatchStatus?
 
 	private enum RootKeys: String, CodingKey {
@@ -39,11 +39,11 @@ struct MatchResponse: Decodable {
 		let serieContainer = try container.nestedContainer(keyedBy: SerieKeys.self, forKey: .serie)
 		serieName = try serieContainer.decode(String.self, forKey: .name)
 
-		opponents = try container.decode([MatchOpponentResponse].self, forKey: .opponents)
+		opponents = try container.decode([MatchTeamResponse].self, forKey: .opponents)
 	}
 }
 
-struct MatchOpponentResponse: Decodable {
+struct MatchTeamResponse: Decodable {
 	let id: Int
 	let name: String
 	let image: URL?

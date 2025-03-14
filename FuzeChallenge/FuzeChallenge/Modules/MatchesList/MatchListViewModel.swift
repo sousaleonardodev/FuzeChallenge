@@ -7,7 +7,7 @@ class TeamViewModel: ObservableObject, Identifiable {
 	@Published var name: String = ""
 	@Published var image: URL?
 
-	init(_ opponent: MatchOpponentResponse) {
+	init(_ opponent: MatchTeamResponse) {
 		self.name = opponent.name
 		self.image = opponent.image
 	}
