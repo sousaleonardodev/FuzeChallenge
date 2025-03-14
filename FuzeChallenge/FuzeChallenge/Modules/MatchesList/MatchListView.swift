@@ -11,6 +11,8 @@ struct LeagueInfoView: View {
 		HStack(alignment: .center, spacing: 8) {
 			AsyncImage(url: leagueImageURL) { phase in
 				switch phase {
+				case .empty:
+					EmptyView()
 				case .failure:
 					Text("Error loading image")
 				case .success(let image):
