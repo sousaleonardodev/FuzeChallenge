@@ -5,6 +5,7 @@ import Foundation
 struct MatchResponse: Decodable {
 	let id: Int
 	let leagueName: String
+	let leagueImageUrl: URL?
 	let serieName: String
 	let opponents: [MatchOpponentResponse]
 	let status: MatchStatus?
@@ -19,6 +20,7 @@ struct MatchResponse: Decodable {
 
 	private enum LeagueKeys: String, CodingKey {
 		case name
+		case imageUrl = "image_url"
 	}
 
 	private enum SerieKeys: String, CodingKey {
@@ -32,6 +34,7 @@ struct MatchResponse: Decodable {
 
 		let leagueContainer = try container.nestedContainer(keyedBy: LeagueKeys.self, forKey: .league)
 		leagueName = try leagueContainer.decode(String.self, forKey: .name)
+		leagueImageUrl = try? leagueContainer.decodeIfPresent(URL.self, forKey: .imageUrl)
 
 		let serieContainer = try container.nestedContainer(keyedBy: SerieKeys.self, forKey: .serie)
 		serieName = try serieContainer.decode(String.self, forKey: .name)
