@@ -1,3 +1,17 @@
+//
+
+import SwiftUI
+import Combine
+
+class OpponentViewModel: ObservableObject, Identifiable {
+	@Published var name: String = ""
+	@Published var image: URL?
+
+	init(_ opponent: MatchOpponentResponse) {
+		self.name = opponent.name
+		self.image = opponent.image
+	}
+}
 class MatchListViewModel: ObservableObject, Identifiable {
 	@Published var datasource: [MatchViewModel] = []
 	private var cancellables: Set<AnyCancellable> = []
