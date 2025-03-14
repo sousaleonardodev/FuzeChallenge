@@ -35,3 +35,33 @@ struct LeagueInfoView: View {
 	)
 	.background(Color.blue)
 }
+
+struct TeamView: View {
+	private let viewModel: TeamViewModel
+
+	init(viewModel: TeamViewModel) {
+		self.viewModel = viewModel
+	}
+
+	var body: some View {
+		VStack(alignment: .center, spacing: 10) {
+			AsyncImage(url: URL(string: "https://cdn.pandascore.co/images/league/image/4554/Liga_Gamers_Club_SSrie_A_logo.png")) { phase in
+				switch phase {
+				case .failure:
+					Text("Error loading image")
+				case .success(let image):
+					image.resizable(resizingMode: .stretch)
+				default:
+					ProgressView()
+				}
+			}
+			.frame(width: 60, height: 80)
+			Text(viewModel.name)
+				.lineLimit(2)
+			//TODO: Increase font size
+				.font(Font.system(size: 10, weight: .medium))
+				.foregroundStyle(.white)
+		}
+		.padding(.init(top: 18.5, leading: 0, bottom: 18.5, trailing: 0))
+	}
+}
