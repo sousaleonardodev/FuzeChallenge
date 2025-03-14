@@ -106,3 +106,29 @@ struct TeamView: View {
 		.padding(.init(top: 18.5, leading: 0, bottom: 18.5, trailing: 0))
 	}
 }
+struct MatchStatusView: View {
+	private let status: String
+
+	init(status: String) {
+		self.status = status
+	}
+
+	var body: some View {
+		Text(status)
+			.font(Font.system(size: 12, weight: .medium))
+			.foregroundColor(.white)
+			.padding(.horizontal, 8)
+			.padding(.vertical, 8)
+			.background(Color.redAlert)
+			.clipShape(.rect(
+				topLeadingRadius: 0,
+				bottomLeadingRadius: 16,
+				bottomTrailingRadius: 0,
+				topTrailingRadius: 16
+			))
+	}
+}
+
+#Preview {
+	MatchStatusView(status: "AGORA")
+}
