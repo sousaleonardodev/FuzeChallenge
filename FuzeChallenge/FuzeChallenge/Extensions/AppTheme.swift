@@ -1,7 +1,6 @@
 //
 
 import SwiftUI
-import VFont
 
 protocol ThemeProtocol {
 	// Fonts
@@ -9,7 +8,10 @@ protocol ThemeProtocol {
 	var fontSmall: Font { get }
 	var fontMedium: Font { get }
 	var fontBig: Font { get }
-	var fontTitle: Font { get }
+
+	// Using UIFont due limitations of UIAppereance
+	var fontNavigationTitle: UIFont { get }
+	var fontNavigationTitleSmall: UIFont { get }
 
 	// Colors
 	var background: Color { get }
@@ -37,8 +39,12 @@ struct DefaultTheme: ThemeProtocol {
 		.custom("Roboto-Bold", size: 14)
 	}
 
-	var fontTitle: Font {
-		.custom("Roboto-Medium", size: 32)
+	var fontNavigationTitle: UIFont {
+		.init(name: "Roboto-Medium", size: 32) ?? .systemFont(ofSize: 32, weight: .medium)
+	}
+
+	var fontNavigationTitleSmall: UIFont {
+		.init(name: "Roboto-Medium", size: 18) ?? .systemFont(ofSize: 18, weight: .medium)
 	}
 
 	var background: Color {
