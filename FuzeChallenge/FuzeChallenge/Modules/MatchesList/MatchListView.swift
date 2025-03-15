@@ -146,6 +146,20 @@ struct MatchStatusView: View {
 	MatchStatusView(status: "AGORA")
 }
 
+struct LoadingView: View {
+	@EnvironmentObject private var themeManager: ThemeManager
+
+	var body: some View {
+		ZStack {
+			themeManager.currentTheme.background
+				.ignoresSafeArea()
+			ProgressView()
+				.scaleEffect(2)
+				.tint(themeManager.currentTheme.textPrimary)
+		}
+	}
+}
+
 struct MatchListView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
 	@ObservedObject var viewModel: MatchListViewModel
