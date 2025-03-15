@@ -28,7 +28,6 @@ struct MatchView: View {
 				Spacer()
 			}
 			Divider()
-			//TODO: Check height
 				.frame(height: 1)
 				.padding(.horizontal)
 				.background(themeManager.currentTheme.lightGray)
@@ -55,20 +54,23 @@ struct LeagueInfoView: View {
 
 	var body: some View {
 		HStack(alignment: .center, spacing: 8) {
-			AsyncImage(url: leagueImageURL) { phase in
+			AsyncImage(url: leagueImageURL,
+					   transaction: Transaction(animation: .default)) { phase in
 				switch phase {
-				case .empty:
-					EmptyView()
-				case .failure:
-					Text("Error loading image")
+				case .empty, .failure:
+					Image(.trophy)
+						.resizable()
+						.clipShape(.circle)
+						.foregroundStyle(themeManager.currentTheme.lightGray)
 				case .success(let image):
 					image.resizable()
 				default:
 					ProgressView()
+						.tint(.pink)
 				}
 			}
-			.clipShape(.circle)
-			.frame(width: 16, height: 16)
+					   .clipShape(.circle)
+					   .frame(width: 16, height: 16)
 			Text(leagueName)
 				.font(themeManager.currentTheme.fontSmallest)
 				.foregroundStyle(themeManager.currentTheme.textPrimary)
@@ -94,19 +96,21 @@ struct TeamView: View {
 
 	var body: some View {
 		VStack(alignment: .center, spacing: 10) {
-			AsyncImage(url: viewModel.image) { phase in
+			AsyncImage(url: viewModel.image,
+					   transaction: Transaction(animation: .default)) { phase in
 				switch phase {
-				case .empty:
-					EmptyView()
-				case .failure:
-					Text("Error loading image")
+				case .empty, .failure:
+					Image(.team)
+						.resizable()
+						.foregroundStyle(themeManager.currentTheme.lightGray)
 				case .success(let image):
 					image.resizable()
 				default:
 					ProgressView()
+						.tint(themeManager.currentTheme.textPrimary)
 				}
 			}
-			.frame(width: 60, height: 80)
+					   .frame(width: 60, height: 80)
 			Text(viewModel.name)
 				.lineLimit(2)
 				.font(themeManager.currentTheme.fontSmall)
@@ -166,7 +170,7 @@ struct MatchListView: View {
 
 	var body: some View {
 		switch viewModel.state {
-			case .error(let error):
+		case .error(let error):
 			Text("Error: \(error.localizedDescription)")
 		case.loading:
 			LoadingView()
