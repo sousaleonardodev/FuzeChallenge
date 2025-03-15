@@ -4,9 +4,13 @@ import SwiftUI
 
 protocol ThemeProtocol {
 	// Fonts
+	/// 8 pts
 	var fontSmallest: Font { get }
+	/// 10 pts
 	var fontSmall: Font { get }
+	/// 12 pts
 	var fontMedium: Font { get }
+	/// 14 pts
 	var fontBig: Font { get }
 
 	// Using UIFont due limitations of UIAppereance
@@ -15,6 +19,7 @@ protocol ThemeProtocol {
 
 	// Colors
 	var background: Color { get }
+	var primary: Color { get }
 	var alertActive: Color { get }
 	var alertInactive: Color { get }
 	var textPrimary: Color { get }
@@ -51,6 +56,10 @@ struct DefaultTheme: ThemeProtocol {
 		.background
 	}
 
+	var primary: Color {
+		.cardPrimary
+	}
+
 	var alertActive: Color {
 		.alertActive
 	}
@@ -68,7 +77,7 @@ struct DefaultTheme: ThemeProtocol {
 	}
 
 	var lightGray: Color {
-		.lightGray
+		.grayByAlpha
 	}
 }
 
