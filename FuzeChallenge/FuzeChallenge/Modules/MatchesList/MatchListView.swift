@@ -126,7 +126,7 @@ struct MatchStatusView: View {
 
 	var body: some View {
 		Text(status)
-			.font(Font.system(size: 12, weight: .medium))
+			.font(themeManager.currentTheme.fontMedium)
 			.foregroundColor(themeManager.currentTheme.textPrimary)
 			.padding(.horizontal, 8)
 			.padding(.vertical, 8)
