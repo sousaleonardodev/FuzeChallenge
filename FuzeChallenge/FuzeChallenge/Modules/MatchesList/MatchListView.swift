@@ -3,6 +3,7 @@
 import SwiftUI
 
 struct MatchView: View {
+	@EnvironmentObject private var themeManager: ThemeManager
 	private var viewModel: MatchViewModel
 
 	init(viewModel: MatchViewModel) {
@@ -20,27 +21,30 @@ struct MatchView: View {
 				TeamView(viewModel: viewModel.firstOpponent)
 				Spacer(minLength: 20)
 				Text("VS")
-					.font(.system(size: 12.0))
-				//TODO: Use colorStyle
-					.foregroundStyle(Color(white: 1.0, opacity: 0.5))
+					.font(themeManager.currentTheme.fontMedium)
+					.foregroundStyle(themeManager.currentTheme.lightGray)
 				Spacer(minLength: 20)
 				TeamView(viewModel: viewModel.secondOpponent)
 				Spacer()
 			}
 			Divider()
-				.background(Color(white: 1, opacity: 0.2))
+			//TODO: Check height
+				.frame(height: 1)
+				.padding(.horizontal)
+				.background(themeManager.currentTheme.lightGray)
 			HStack() {
 				LeagueInfoView(leagueName: viewModel.leagueSerie, leagueImageURL: viewModel.leagueImage)
 				Spacer()
 			}
 		}
-		.background(Color(red: 39/255, green: 38/255, blue: 57/255))
+		.background(themeManager.currentTheme.primary)
 		.cornerRadius(16)
-		.listRowBackground(Color.clear)
+		.listRowBackground(themeManager.currentTheme.background)
 	}
 }
 
 struct LeagueInfoView: View {
+	@EnvironmentObject private var themeManager: ThemeManager
 	private let leagueName: String
 	private let leagueImageURL: URL?
 
@@ -66,8 +70,8 @@ struct LeagueInfoView: View {
 			.clipShape(.circle)
 			.frame(width: 16, height: 16)
 			Text(leagueName)
-				.font(.system(size: 8))
-				.foregroundStyle(.white)
+				.font(themeManager.currentTheme.fontSmallest)
+				.foregroundStyle(themeManager.currentTheme.textPrimary)
 		}
 		.padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
 	}
@@ -81,6 +85,7 @@ struct LeagueInfoView: View {
 }
 
 struct TeamView: View {
+	@EnvironmentObject private var themeManager: ThemeManager
 	private let viewModel: TeamViewModel
 
 	init(viewModel: TeamViewModel) {
@@ -104,8 +109,7 @@ struct TeamView: View {
 			.frame(width: 60, height: 80)
 			Text(viewModel.name)
 				.lineLimit(2)
-			//TODO: Increase font size
-				.font(Font.system(size: 10, weight: .medium))
+				.font(themeManager.currentTheme.fontSmall)
 				.foregroundStyle(.white)
 		}
 		.padding(.init(top: 18.5, leading: 0, bottom: 18.5, trailing: 0))
@@ -113,6 +117,7 @@ struct TeamView: View {
 }
 
 struct MatchStatusView: View {
+	@EnvironmentObject private var themeManager: ThemeManager
 	private let status: String
 
 	init(status: String) {
@@ -122,16 +127,18 @@ struct MatchStatusView: View {
 	var body: some View {
 		Text(status)
 			.font(Font.system(size: 12, weight: .medium))
-			.foregroundColor(.white)
+			.foregroundColor(themeManager.currentTheme.textPrimary)
 			.padding(.horizontal, 8)
 			.padding(.vertical, 8)
-			.background(Color.redAlert)
-			.clipShape(.rect(
-				topLeadingRadius: 0,
-				bottomLeadingRadius: 16,
-				bottomTrailingRadius: 0,
-				topTrailingRadius: 16
-			))
+			.background(themeManager.currentTheme.background)
+			.clipShape(
+				.rect(
+					topLeadingRadius: 0,
+					bottomLeadingRadius: 16,
+					bottomTrailingRadius: 0,
+					topTrailingRadius: 16
+				)
+			)
 	}
 }
 
@@ -140,6 +147,7 @@ struct MatchStatusView: View {
 }
 
 struct MatchListView: View {
+	@EnvironmentObject private var themeManager: ThemeManager
 	@ObservedObject var viewModel: MatchListViewModel
 
 	var body: some View {
@@ -154,10 +162,9 @@ struct MatchListView: View {
 			.refreshable {
 				viewModel.fetchMatches()
 			}
-
-			//TODO: Create ColorStyling
-			.modifier(NavigationBarModifier(backgroundColor: .darkPurple, titleColor: .white))
+			.modifier(NavigationBarModifier(themeManager))
 			.navigationTitle("Partidas")
+			.environmentObject(themeManager)
 		}
 	}
 
@@ -167,25 +174,24 @@ struct MatchListView: View {
 }
 
 struct NavigationBarModifier: ViewModifier {
-	private var backgroundColor: Color
-	private var titleColor: Color
+	private let themeManager: ThemeManager
 
-	init(backgroundColor: Color, titleColor: Color) {
-		self.backgroundColor = backgroundColor
-		self.titleColor = titleColor
+	init(_ themeManager: ThemeManager) {
+		self.themeManager = themeManager
 
 		let appearance = UINavigationBarAppearance()
 		appearance.configureWithOpaqueBackground()
-		appearance.backgroundColor = UIColor(backgroundColor)
+		appearance.backgroundColor = UIColor(themeManager.currentTheme.background)
 
-		let titleAttributes: [NSAttributedString.Key : Any] = [
-			.foregroundColor: UIColor(titleColor)
-			//TODO: Set fonts
-//			.font: .systemFont(ofSize: 20, weight: .bold)
+		appearance.titleTextAttributes = [
+			.foregroundColor: UIColor(themeManager.currentTheme.textPrimary),
+			.font: themeManager.currentTheme.fontNavigationTitleSmall
 		]
 
-		appearance.titleTextAttributes = titleAttributes
-		appearance.largeTitleTextAttributes = titleAttributes
+		appearance.largeTitleTextAttributes = [
+			.foregroundColor: UIColor(themeManager.currentTheme.textPrimary),
+			.font: themeManager.currentTheme.fontNavigationTitle
+		]
 
 		UINavigationBar.appearance().standardAppearance = appearance
 		UINavigationBar.appearance().compactAppearance = appearance
@@ -194,7 +200,7 @@ struct NavigationBarModifier: ViewModifier {
 
 	func body(content: Content) -> some View {
 		content
-			.background(backgroundColor)
+			.background(themeManager.currentTheme.background)
 			.navigationBarTitleDisplayMode(.automatic)
 	}
 }
