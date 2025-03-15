@@ -21,6 +21,7 @@ struct MatchView: View {
 				Spacer(minLength: 20)
 				Text("VS")
 					.font(.system(size: 12.0))
+				//TODO: Use colorStyle
 					.foregroundStyle(Color(white: 1.0, opacity: 0.5))
 				Spacer(minLength: 20)
 				TeamView(viewModel: viewModel.secondOpponent)
@@ -147,19 +148,53 @@ struct MatchListView: View {
 				MatchView(viewModel: viewModel)
 					.listRowSeparator(.hidden)
 			}
-			.listRowBackground(Color.red)
-			.background(Color.darkPurple)
 			.listRowSpacing(12)
 			.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
 			.listStyle(.plain)
 			.refreshable {
 				viewModel.fetchMatches()
 			}
-			.navigationTitle(Text("Partidas"))
+
+			//TODO: Create ColorStyling
+			.modifier(NavigationBarModifier(backgroundColor: .darkPurple, titleColor: .white))
+			.navigationTitle("Partidas")
 		}
 	}
 
 	init(viewModel: MatchListViewModel) {
 		self.viewModel = viewModel
+	}
+}
+
+struct NavigationBarModifier: ViewModifier {
+	private var backgroundColor: Color
+	private var titleColor: Color
+
+	init(backgroundColor: Color, titleColor: Color) {
+		self.backgroundColor = backgroundColor
+		self.titleColor = titleColor
+
+		let appearance = UINavigationBarAppearance()
+		appearance.configureWithOpaqueBackground()
+		appearance.backgroundColor = UIColor(backgroundColor)
+
+		let titleAttributes: [NSAttributedString.Key : Any] = [
+			.foregroundColor: UIColor(titleColor)
+			//TODO: Set fonts
+//			.font: .systemFont(ofSize: 20, weight: .bold)
+		]
+
+		appearance.titleTextAttributes = titleAttributes
+		appearance.largeTitleTextAttributes = titleAttributes
+
+		UINavigationBar.appearance().standardAppearance = appearance
+		UINavigationBar.appearance().compactAppearance = appearance
+		UINavigationBar.appearance().scrollEdgeAppearance = appearance
+	}
+
+	func body(content: Content) -> some View {
+		content
+			.background(backgroundColor)
+			.navigationBarTitleDisplayMode(.automatic)
 	}
 }
