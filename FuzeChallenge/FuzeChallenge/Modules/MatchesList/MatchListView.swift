@@ -165,20 +165,27 @@ struct MatchListView: View {
 	@ObservedObject var viewModel: MatchListViewModel
 
 	var body: some View {
-		NavigationStack {
-			List(viewModel.datasource) { viewModel in
-				MatchView(viewModel: viewModel)
-					.listRowSeparator(.hidden)
+		switch viewModel.state {
+			case .error(let error):
+			Text("Error: \(error.localizedDescription)")
+		case.loading:
+			LoadingView()
+		case .loaded:
+			NavigationStack {
+				List(viewModel.datasource) { viewModel in
+					MatchView(viewModel: viewModel)
+						.listRowSeparator(.hidden)
+				}
+				.listRowSpacing(12)
+				.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+				.listStyle(.plain)
+				.refreshable {
+					viewModel.fetchMatches()
+				}
+				.modifier(NavigationBarModifier(themeManager))
+				.navigationTitle("Partidas")
+				.environmentObject(themeManager)
 			}
-			.listRowSpacing(12)
-			.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-			.listStyle(.plain)
-			.refreshable {
-				viewModel.fetchMatches()
-			}
-			.modifier(NavigationBarModifier(themeManager))
-			.navigationTitle("Partidas")
-			.environmentObject(themeManager)
 		}
 	}
 

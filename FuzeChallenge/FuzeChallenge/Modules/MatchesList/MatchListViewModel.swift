@@ -9,6 +9,8 @@ class TeamViewModel: ObservableObject, Identifiable {
 
 	init(_ opponent: MatchTeamResponse) {
 		self.name = opponent.name
+
+		// TODO: Add image size url
 		self.image = opponent.image
 	}
 }
@@ -23,6 +25,8 @@ class MatchViewModel: ObservableObject, Identifiable {
 	init(_ match: MatchResponse) {
 		leagueSerie = match.leagueName + "" + match.serieName
 			.trimmingCharacters(in: .whitespacesAndNewlines)
+
+		// TODO: Add image size url
 		leagueImage = match.leagueImageUrl
 
 		//TODO: Add validation
@@ -35,7 +39,15 @@ class MatchViewModel: ObservableObject, Identifiable {
 }
 
 class MatchListViewModel: ObservableObject, Identifiable {
+	enum State {
+		case loading
+		case loaded
+		case error(Error)
+	}
+
 	@Published var datasource: [MatchViewModel] = []
+	@Published var state: State = .loading
+
 	private var cancellables: Set<AnyCancellable> = []
 
 	private let matchFetcher: MatchFeachable
@@ -47,6 +59,8 @@ class MatchListViewModel: ObservableObject, Identifiable {
 
 	func fetchMatches() {
 		datasource = []
+		state = .loading
+
 		matchFetcher.listMatches()
 			.map { response in
 				response.map(MatchViewModel.init)
@@ -61,8 +75,7 @@ class MatchListViewModel: ObservableObject, Identifiable {
 				case .failure(let error):
 					self.datasource = []
 					print(error.localizedDescription)
-
-					//TODO: Implement error state
+					state = .error(error)
 				case .finished:
 					break
 				}
@@ -72,6 +85,7 @@ class MatchListViewModel: ObservableObject, Identifiable {
 				}
 
 				self.datasource = matches
+				state = .loaded
 			}
 			.store(in: &cancellables)
 	}
