@@ -9,8 +9,6 @@ class TeamViewModel: ObservableObject, Identifiable {
 
 	init(_ opponent: MatchTeamModel) {
 		self.name = opponent.name
-
-		// TODO: Add image size url
 		self.image = opponent.image
 	}
 }
@@ -26,8 +24,8 @@ class MatchViewModel: ObservableObject, Identifiable {
 		leagueSerie = match.leagueName + " " + match.serieName
 			.trimmingCharacters(in: .whitespacesAndNewlines)
 
-		// TODO: Add image size url
-		leagueImage = match.leagueImageUrl
+		// Using thumb_ to optimize data consumption and rendering
+		leagueImage = match.leagueImageUrl?.insertingToLastPath("thumb_")
 
 		if match.opponents.count > 0 {
 			firstOpponent = TeamViewModel(match.opponents[0])
