@@ -21,6 +21,7 @@ class MatchViewModel: ObservableObject, Identifiable {
 	@Published var firstOpponent: TeamViewModel
 	@Published var secondOpponent: TeamViewModel
 	@Published var matchStatus: String
+	@Published var matchStatus: MatchStatusViewModel
 
 	init(_ match: MatchResponse) {
 		leagueSerie = match.leagueName + "" + match.serieName
@@ -35,6 +36,29 @@ class MatchViewModel: ObservableObject, Identifiable {
 
 		//TODO: Set default status or filter null ones
 		matchStatus = match.status?.rawValue ?? "Unknown"
+		matchStatus = .init(match.status, date: match.scheduledDate)
+	}
+}
+
+class MatchStatusViewModel: ObservableObject, Identifiable {
+	@Published var status: MatchStatus
+	private var date: String?
+
+	init(_ status: MatchStatus, date: String?) {
+		self.status = status
+		self.date = date
+	}
+
+	func getDate() -> String {
+		guard status != .running else {
+			return "AGORA"
+		}
+
+		guard let date = date, let localDate = DateFormatterHelper.toLocalString(date) else {
+			return ""
+		}
+
+		return DateFormatterHelper.toShortDateTimeString(localDate) ?? ""
 	}
 }
 

@@ -14,14 +14,14 @@ struct MatchView: View {
 		VStack(alignment: .center, spacing: 0) {
 			HStack() {
 				Spacer()
-				MatchStatusView(status: viewModel.matchStatus)
+				MatchStatusView(viewModel: viewModel.matchStatus)
 			}
 			HStack(spacing: 20) {
-				TeamView(viewModel: viewModel.firstOpponent)
+				TeamView(viewModel: viewModel.firstOpponent!)
 				Text("VS")
 					.font(themeManager.currentTheme.fontMedium)
 					.foregroundStyle(themeManager.currentTheme.lightGray)
-				TeamView(viewModel: viewModel.secondOpponent)
+				TeamView(viewModel: viewModel.secondOpponent!)
 			}
 			Divider()
 				.frame(height: 1)
@@ -118,19 +118,21 @@ struct TeamView: View {
 
 struct MatchStatusView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
-	private let status: String
+	@ObservedObject var viewModel: MatchStatusViewModel
 
-	init(status: String) {
-		self.status = status
+	init(viewModel: MatchStatusViewModel) {
+		self.viewModel = viewModel
 	}
 
 	var body: some View {
-		Text(status)
-			.font(themeManager.currentTheme.fontMedium)
+		let color = viewModel.status == .running ? themeManager.currentTheme.alertActive : themeManager.currentTheme.darkGray
+
+		Text(viewModel.getDate())
+			.font(themeManager.currentTheme.fontSmallest)
 			.foregroundColor(themeManager.currentTheme.textPrimary)
 			.padding(.horizontal, 8)
 			.padding(.vertical, 8)
-			.background(themeManager.currentTheme.background)
+			.background(color)
 			.clipShape(
 				.rect(
 					topLeadingRadius: 0,
@@ -142,9 +144,6 @@ struct MatchStatusView: View {
 	}
 }
 
-#Preview {
-	MatchStatusView(status: "AGORA")
-}
 
 struct LoadingView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
