@@ -25,11 +25,12 @@ protocol ThemeProtocol {
 	var textPrimary: Color { get }
 	var textSecondary: Color { get }
 	var lightGray: Color { get }
+	var darkGray: Color { get }
 }
 
 struct DefaultTheme: ThemeProtocol {
 	var fontSmallest: Font {
-		.custom("Roboto-Regular", size: 8)
+		.custom("Roboto-Bold", size: 8)
 	}
 
 	var fontSmall: Font {
@@ -77,7 +78,11 @@ struct DefaultTheme: ThemeProtocol {
 	}
 
 	var lightGray: Color {
-		.grayByAlpha
+		.grayByAlpha50
+	}
+
+	var darkGray: Color {
+		.grayByAlpha20
 	}
 }
 
