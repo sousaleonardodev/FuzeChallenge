@@ -34,8 +34,6 @@ class MatchViewModel: ObservableObject, Identifiable {
 		firstOpponent = TeamViewModel(match.opponents[0])
 		secondOpponent = TeamViewModel(match.opponents[1])
 
-		//TODO: Set default status or filter null ones
-		matchStatus = match.status?.rawValue ?? "Unknown"
 		matchStatus = .init(match.status, date: match.scheduledDate)
 	}
 }
