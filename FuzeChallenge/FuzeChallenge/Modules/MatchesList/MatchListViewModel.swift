@@ -18,21 +18,24 @@ class TeamViewModel: ObservableObject, Identifiable {
 class MatchViewModel: ObservableObject, Identifiable {
 	@Published var leagueSerie: String
 	@Published var leagueImage: URL?
-	@Published var firstOpponent: TeamViewModel
-	@Published var secondOpponent: TeamViewModel
-	@Published var matchStatus: String
+	@Published var firstOpponent: TeamViewModel?
+	@Published var secondOpponent: TeamViewModel?
 	@Published var matchStatus: MatchStatusViewModel
 
 	init(_ match: MatchResponse) {
-		leagueSerie = match.leagueName + "" + match.serieName
+		leagueSerie = match.leagueName + " " + match.serieName
 			.trimmingCharacters(in: .whitespacesAndNewlines)
 
 		// TODO: Add image size url
 		leagueImage = match.leagueImageUrl
 
-		//TODO: Add validation
-		firstOpponent = TeamViewModel(match.opponents[0])
-		secondOpponent = TeamViewModel(match.opponents[1])
+		if match.opponents.count > 0 {
+			firstOpponent = TeamViewModel(match.opponents[0])
+		}
+
+		if match.opponents.count > 1 {
+			secondOpponent = TeamViewModel(match.opponents[1])
+		}
 
 		matchStatus = .init(match.status, date: match.scheduledDate)
 	}
