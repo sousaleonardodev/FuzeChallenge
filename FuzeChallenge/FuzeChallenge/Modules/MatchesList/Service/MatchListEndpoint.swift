@@ -13,7 +13,7 @@ struct MatchListEndpoint: ApiServiceEndpoint {
 			.init(name: "sort", value: "-status, begin_at"),
 			.init(name: "filter[status]", value: "running, postponed, not_started"),
 
-			// Setting a year in range
+			// Setting a year in range to get next scheduled matches
 			.init(name: "range[begin_at]", value: dateRangeQueryItem())
 		]
 	}

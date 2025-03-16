@@ -16,16 +16,12 @@ struct MatchView: View {
 				Spacer()
 				MatchStatusView(status: viewModel.matchStatus)
 			}
-			HStack(alignment: .center) {
-				Spacer()
+			HStack(spacing: 20) {
 				TeamView(viewModel: viewModel.firstOpponent)
-				Spacer(minLength: 20)
 				Text("VS")
 					.font(themeManager.currentTheme.fontMedium)
 					.foregroundStyle(themeManager.currentTheme.lightGray)
-				Spacer(minLength: 20)
 				TeamView(viewModel: viewModel.secondOpponent)
-				Spacer()
 			}
 			Divider()
 				.frame(height: 1)
@@ -101,8 +97,8 @@ struct TeamView: View {
 				switch phase {
 				case .empty, .failure:
 					Image(.team)
-						.resizable()
 						.foregroundStyle(themeManager.currentTheme.lightGray)
+						.frame(width: 60, height: 80)
 				case .success(let image):
 					image.resizable()
 				default:
@@ -164,6 +160,43 @@ struct LoadingView: View {
 	}
 }
 
+struct ErrorView: View {
+	private let message: String
+	private let retryAction: () -> Void
+
+	@EnvironmentObject private var themeManager: ThemeManager
+
+	init(message: String, action: @escaping () -> Void) {
+		self.message = message
+		self.retryAction = action
+	}
+
+	var body: some View {
+		ZStack {
+			themeManager.currentTheme.background
+				.ignoresSafeArea()
+
+			VStack {
+				Spacer()
+				Text(message)
+					.font(themeManager.currentTheme.fontBig)
+					.foregroundStyle(themeManager.currentTheme.textSecondary)
+					.lineLimit(2)
+					.padding(24)
+
+				Button("Tentar novamente") {
+					retryAction()
+				}
+				.font(themeManager.currentTheme.fontBig)
+				.foregroundStyle(themeManager.currentTheme.textPrimary)
+				Spacer()
+			}
+			.background(themeManager.currentTheme.background).ignoresSafeArea()
+			.padding()
+		}
+	}
+}
+
 struct MatchListView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
 	@ObservedObject var viewModel: MatchListViewModel
@@ -171,7 +204,9 @@ struct MatchListView: View {
 	var body: some View {
 		switch viewModel.state {
 		case .error(let error):
-			Text("Error: \(error.localizedDescription)")
+			ErrorView(message: error.localizedDescription) {
+				viewModel.fetchMatches()
+			}
 		case.loading:
 			LoadingView()
 		case .loaded:
