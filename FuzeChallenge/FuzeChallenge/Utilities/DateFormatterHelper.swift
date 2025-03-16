@@ -11,7 +11,7 @@ final class DateFormatterHelper {
 		/// HH:mm
 		case timeShort = "HH:mm"
 		/// weekday short
-		case weekDayShort = "EEE"
+		case weekdayShort = "EEE"
 	}
 
 	static func toUTCString(_ date: Date) -> String {
