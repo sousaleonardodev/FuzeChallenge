@@ -76,13 +76,6 @@ struct LeagueInfoView: View {
 	}
 }
 
-#Preview {
-	LeagueInfoView(leagueName: "Gamers Club Liga Série A",
-				   leagueImageURL: URL(string: "https://cdn.pandascore.co/images/league/image/4554/Liga_Gamers_Club_SSrie_A_logo.png")
-	)
-	.background(Color.blue)
-}
-
 struct TeamView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
 	private let viewModel: TeamViewModel
@@ -128,20 +121,22 @@ struct MatchStatusView: View {
 	var body: some View {
 		let color = viewModel.status == .running ? themeManager.currentTheme.alertActive : themeManager.currentTheme.darkGray
 
-		Text(viewModel.getDate())
-			.font(themeManager.currentTheme.fontSmallest)
-			.foregroundColor(themeManager.currentTheme.textPrimary)
-			.padding(.horizontal, 8)
-			.padding(.vertical, 8)
-			.background(color)
-			.clipShape(
-				.rect(
-					topLeadingRadius: 0,
-					bottomLeadingRadius: 16,
-					bottomTrailingRadius: 0,
-					topTrailingRadius: 16
+		if let status = viewModel.getDate() {
+			Text(status)
+				.font(themeManager.currentTheme.fontSmallest)
+				.foregroundColor(themeManager.currentTheme.textPrimary)
+				.padding(.horizontal, 8)
+				.padding(.vertical, 8)
+				.background(color)
+				.clipShape(
+					.rect(
+						topLeadingRadius: 0,
+						bottomLeadingRadius: 16,
+						bottomTrailingRadius: 0,
+						topTrailingRadius: 16
+					)
 				)
-			)
+		}
 	}
 }
 
