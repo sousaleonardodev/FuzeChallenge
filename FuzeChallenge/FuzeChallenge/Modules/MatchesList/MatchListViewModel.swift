@@ -7,7 +7,7 @@ class TeamViewModel: ObservableObject, Identifiable {
 	@Published var name: String = ""
 	@Published var image: URL?
 
-	init(_ opponent: MatchTeamResponse) {
+	init(_ opponent: MatchTeamModel) {
 		self.name = opponent.name
 
 		// TODO: Add image size url
@@ -22,7 +22,7 @@ class MatchViewModel: ObservableObject, Identifiable {
 	@Published var secondOpponent: TeamViewModel?
 	@Published var matchStatus: MatchStatusViewModel
 
-	init(_ match: MatchResponse) {
+	init(_ match: MatchModel) {
 		leagueSerie = match.leagueName + " " + match.serieName
 			.trimmingCharacters(in: .whitespacesAndNewlines)
 
