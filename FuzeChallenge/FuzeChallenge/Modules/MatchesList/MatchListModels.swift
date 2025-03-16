@@ -2,12 +2,12 @@
 
 import Foundation
 
-struct MatchResponse: Decodable {
+struct MatchModel: Decodable {
 	let id: Int
 	let leagueName: String
 	let leagueImageUrl: URL?
 	let serieName: String
-	let opponents: [MatchTeamResponse]
+	let opponents: [MatchTeamModel]
 	let status: MatchStatus
 	let scheduledDate: String?
 
@@ -42,11 +42,11 @@ struct MatchResponse: Decodable {
 		let serieContainer = try container.nestedContainer(keyedBy: SerieKeys.self, forKey: .serie)
 		serieName = try serieContainer.decode(String.self, forKey: .name)
 
-		opponents = try container.decode([MatchTeamResponse].self, forKey: .opponents)
+		opponents = try container.decode([MatchTeamModel].self, forKey: .opponents)
 	}
 }
 
-struct MatchTeamResponse: Decodable {
+struct MatchTeamModel: Decodable {
 	let id: Int
 	let name: String
 	let image: URL?
@@ -71,7 +71,7 @@ struct MatchTeamResponse: Decodable {
 	}
 }
 
-struct MatchStatusResponse: Decodable {
+struct MatchStatusModel: Decodable {
 	let status: MatchStatus
 	let scheduledDate: String?
 
