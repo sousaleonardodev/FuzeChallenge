@@ -3,7 +3,7 @@
 import SwiftUI
 import Combine
 
-class TeamViewModel: ObservableObject, Identifiable {
+final class TeamViewModel: ObservableObject, Identifiable {
 	@Published var name: String = ""
 	@Published var image: URL?
 
@@ -13,7 +13,7 @@ class TeamViewModel: ObservableObject, Identifiable {
 	}
 }
 
-class MatchViewModel: ObservableObject, Identifiable {
+final class MatchViewModel: ObservableObject, Identifiable {
 	@Published var leagueSerie: String
 	@Published var leagueImage: URL?
 	@Published var firstOpponent: TeamViewModel?
@@ -39,7 +39,7 @@ class MatchViewModel: ObservableObject, Identifiable {
 	}
 }
 
-class MatchStatusViewModel: ObservableObject, Identifiable {
+final class MatchStatusViewModel: ObservableObject, Identifiable {
 	@Published var status: MatchStatus
 	private var date: String?
 
@@ -70,7 +70,7 @@ class MatchStatusViewModel: ObservableObject, Identifiable {
 	}
 }
 
-class MatchListViewModel: ObservableObject, Identifiable {
+final class MatchListViewModel: ObservableObject, Identifiable {
 	enum State {
 		case loading
 		case loaded
@@ -106,7 +106,6 @@ class MatchListViewModel: ObservableObject, Identifiable {
 				switch value {
 				case .failure(let error):
 					self.datasource = []
-					print(error.localizedDescription)
 					state = .error(error)
 				case .finished:
 					break

@@ -112,7 +112,7 @@ struct TeamView: View {
 
 struct MatchStatusView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
-	@ObservedObject var viewModel: MatchStatusViewModel
+	@ObservedObject private var viewModel: MatchStatusViewModel
 
 	init(viewModel: MatchStatusViewModel) {
 		self.viewModel = viewModel
@@ -142,7 +142,7 @@ struct MatchStatusView: View {
 
 struct MatchListView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
-	@ObservedObject var viewModel: MatchListViewModel
+	@ObservedObject private var viewModel: MatchListViewModel
 
 	var body: some View {
 		switch viewModel.state {

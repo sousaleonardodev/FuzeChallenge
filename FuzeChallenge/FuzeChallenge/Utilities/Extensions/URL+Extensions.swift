@@ -7,7 +7,7 @@ extension URL {
 		var lastPathComponent = lastPathComponent
 		lastPathComponent = string + lastPathComponent
 
-		var newURL = self.deletingLastPathComponent()
+		let newURL = self.deletingLastPathComponent()
 		return newURL.appendingPathComponent(lastPathComponent)
 	}
 }
