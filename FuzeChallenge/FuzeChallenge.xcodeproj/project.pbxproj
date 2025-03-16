@@ -37,20 +37,6 @@
 			);
 			target = FABEF6432D823E8F0012A600 /* FuzeChallenge */;
 		};
-		FAF9B9712D877393002877A0 /* Exceptions for "FuzeChallengeTests" folder in "FuzeChallenge" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Extensions/URL+Extensions.swift",
-			);
-			target = FABEF6432D823E8F0012A600 /* FuzeChallenge */;
-		};
-		FAF9B9722D877393002877A0 /* Exceptions for "FuzeChallengeTests" folder in "FuzeChallengeTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Extensions/URL+Extensions.swift",
-			);
-			target = FABEF6532D823E900012A600 /* FuzeChallengeTests */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
