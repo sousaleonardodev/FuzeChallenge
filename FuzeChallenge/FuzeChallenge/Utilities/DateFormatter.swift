@@ -3,8 +3,16 @@
 import Foundation
 
 final class DateFormatterHelper {
-	static private let utcFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-	static private let localShortFormat = "dd.MM HH:mm"
+	enum DateFormat: String {
+		/// yyyy-MM-dd'T'HH:mm:ssZ
+		case utcFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+		/// dd.MM HH:mm
+		case localShortFormat = "dd.MM HH:mm"
+		/// HH:mm
+		case timeShort = "HH:mm"
+		/// weekday short
+		case weekDayShort = "EEE"
+	}
 
 	static func toUTCString(_ date: Date) -> String {
 		let formatter = DateFormatter()
@@ -14,42 +22,34 @@ final class DateFormatterHelper {
 		return formatter.string(from: date)
 	}
 
-	static func toLocalString(_ date: String) -> String? {
+	static func toLocalDate(_ date: String) -> Date? {
 		let formatter = DateFormatter()
 		formatter.timeZone = TimeZone(abbreviation: "UTC")
-		formatter.dateFormat = utcFormat
+		formatter.dateFormat = DateFormat.utcFormat.rawValue
 
 		guard let convertedDate = formatter.date(from: date) else {
 			return nil
 		}
+
 		formatter.timeZone = .current
-		
-		return formatter.string(from: convertedDate)
+
+		return formatter.date(from: formatter.string(from: convertedDate))
 	}
 
-	static func toShortDateTimeString(_ dateString: String) -> String? {
+	static func toString(_ date: Date, format: DateFormat) -> String {
 		let formatter = DateFormatter()
-		formatter.dateFormat = utcFormat
-		formatter.timeZone = .current
-
-		guard let date = formatter.date(from: dateString) else {
-			return nil
-		}
-
-		formatter.dateFormat = localShortFormat
+		formatter.dateFormat = format.rawValue
 
 		return formatter.string(from: date)
 	}
-}
 
-extension Date {
-	var utcString: String {
-		DateFormatterHelper.toUTCString(self)
-	}
+	static func toWeekday(_ date: Date) -> String {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "EEE"
 
-	var addingYear: Date? {
-		var components = DateComponents()
-		components.year = 1
-		return Calendar.current.date(byAdding: components, to: self)
+		// Used to get day localized
+		formatter.locale = .current
+
+		return formatter.string(from: date)
 	}
 }
