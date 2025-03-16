@@ -50,9 +50,9 @@ class MatchListViewModel: ObservableObject, Identifiable {
 
 	private var cancellables: Set<AnyCancellable> = []
 
-	private let matchFetcher: MatchFeachable
+	private let matchFetcher: MatchListServiceProtocol
 
-	init(matchFetcher: MatchFeachable) {
+	init(matchFetcher: MatchListServiceProtocol) {
 		self.matchFetcher = matchFetcher
 		self.fetchMatches()
 	}
@@ -61,7 +61,7 @@ class MatchListViewModel: ObservableObject, Identifiable {
 		datasource = []
 		state = .loading
 
-		matchFetcher.listMatches()
+		matchFetcher.getMatches()
 			.map { response in
 				response.map(MatchViewModel.init)
 			}
