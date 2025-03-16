@@ -10,7 +10,7 @@ struct MatchListEndpoint: ApiServiceEndpoint {
 	var queryItems: [URLQueryItem] {
 		[
 			.init(name: "filter[opponents_filled]", value: "true"),
-			.init(name: "sort", value: "-status, begin_at"),
+			.init(name: "sort", value: "begin_at, -status"),
 			.init(name: "filter[status]", value: "running, postponed, not_started"),
 
 			// Setting a year in range to get next scheduled matches
