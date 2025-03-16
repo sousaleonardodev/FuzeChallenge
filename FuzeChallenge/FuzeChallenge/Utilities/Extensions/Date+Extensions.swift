@@ -7,8 +7,8 @@ extension Date {
 		Calendar.current.isDateInToday(self)
 	}
 
-	var isWithinCurrentWeek: Bool {
-		Calendar.current.isDate(self, equalTo: Date(), toGranularity: .weekOfYear)
+	var isTomorrow: Bool {
+		Calendar.current.isDateInTomorrow(self)
 	}
 
 	var utcString: String {

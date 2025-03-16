@@ -62,7 +62,7 @@ class MatchStatusViewModel: ObservableObject, Identifiable {
 
 		if localDate.isToday {
 			return "Hoje, " + DateFormatterHelper.toString(localDate, format: .timeShort)
-		} else if localDate.isWithinCurrentWeek {
+		} else if localDate.isTomorrow {
 			let weekDay = DateFormatterHelper.toWeekday(localDate).capitalized
 
 			return weekDay + ", " + DateFormatterHelper.toString(localDate, format: .timeShort)
