@@ -4,7 +4,7 @@ import Foundation
 import Combine
 
 protocol MatchListServiceProtocol {
-	func getMatches() -> AnyPublisher<[MatchResponse], RequestError>
+	func getMatches() -> AnyPublisher<[MatchModel], RequestError>
 }
 
 class MatchListService: MatchListServiceProtocol {
@@ -14,7 +14,7 @@ class MatchListService: MatchListServiceProtocol {
 		self.apiService = apiService
 	}
 	
-	func getMatches() -> AnyPublisher<[MatchResponse], RequestError> {
+	func getMatches() -> AnyPublisher<[MatchModel], RequestError> {
 		apiService.request(MatchListEndpoint())
 	}
 }
