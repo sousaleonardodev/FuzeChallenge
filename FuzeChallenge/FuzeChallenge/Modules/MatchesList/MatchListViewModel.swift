@@ -50,16 +50,25 @@ class MatchStatusViewModel: ObservableObject, Identifiable {
 		self.date = date
 	}
 
-	func getDate() -> String {
+	func getDate() -> String? {
 		guard status != .running else {
 			return "AGORA"
 		}
 
-		guard let date = date, let localDate = DateFormatterHelper.toLocalString(date) else {
-			return ""
+		guard let dateString = date,
+				let localDate = DateFormatterHelper.toLocalDate(dateString) else {
+			return nil
 		}
 
-		return DateFormatterHelper.toShortDateTimeString(localDate) ?? ""
+		if localDate.isToday {
+			return "Hoje, " + DateFormatterHelper.toString(localDate, format: .timeShort)
+		} else if localDate.isWithinCurrentWeek {
+			let weekDay = DateFormatterHelper.toWeekday(localDate).capitalized
+
+			return weekDay + ", " + DateFormatterHelper.toString(localDate, format: .timeShort)
+		}
+
+		return DateFormatterHelper.toString(localDate, format: .localShortFormat)
 	}
 }
 
