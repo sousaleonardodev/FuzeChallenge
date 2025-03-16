@@ -10,10 +10,18 @@ struct MatchListEndpoint: ApiServiceEndpoint {
 	var queryItems: [URLQueryItem] {
 		[
 			.init(name: "filter[opponents_filled]", value: "true"),
-			.init(name: "sort", value: "-status"),
+			.init(name: "sort", value: "-status, begin_at"),
 			.init(name: "filter[status]", value: "running, postponed, not_started"),
+
 			// Setting a year in range
-			.init(name: "range[begin_at]", value: "2025-03-15T11:00:00,2027-02-26T11:00:00")
+			.init(name: "range[begin_at]", value: dateRangeQueryItem())
 		]
+	}
+
+	private func dateRangeQueryItem() -> String {
+		let today = Date().utcString
+		let nextYear = Date().addingYear?.utcString ?? today
+
+		return "\(today),\(nextYear)"
 	}
 }
