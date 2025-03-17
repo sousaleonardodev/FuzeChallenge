@@ -14,6 +14,10 @@ final class TeamViewModel: ObservableObject, Identifiable {
 		model.image
 	}
 
+	var id: Int {
+		model.id
+	}
+
 	init(_ opponent: MatchTeamModel) {
 		self.model = opponent
 	}

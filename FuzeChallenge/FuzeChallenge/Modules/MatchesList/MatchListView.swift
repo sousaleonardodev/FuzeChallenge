@@ -5,6 +5,7 @@ import Combine
 
 struct MatchView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
+
 	private var viewModel: MatchViewModel
 
 	init(viewModel: MatchViewModel) {
@@ -41,6 +42,7 @@ struct MatchView: View {
 
 struct LeagueInfoView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
+
 	private let leagueName: String
 	private let leagueImageURL: URL?
 
@@ -78,8 +80,9 @@ struct LeagueInfoView: View {
 
 struct TeamView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
-	private let viewModel: TeamViewModel
 
+	private let viewModel: TeamViewModel
+	
 	init(viewModel: TeamViewModel) {
 		self.viewModel = viewModel
 	}
