@@ -10,6 +10,8 @@ protocol ThemeProtocol {
 	var fontSmall: Font { get }
 	/// 12 pts
 	var fontMedium: Font { get }
+	/// 12 pts
+	var fontMediumBold: Font { get }
 	/// 14 pts
 	var fontBig: Font { get }
 
@@ -40,6 +42,11 @@ struct DefaultTheme: ThemeProtocol {
 	var fontMedium: Font {
 		.custom("Roboto-Regular", size: 12)
 	}
+
+	var fontMediumBold: Font {
+		.custom("Roboto-Bold", size: 12)
+	}
+
 
 	var fontBig: Font {
 		.custom("Roboto-Bold", size: 14)
