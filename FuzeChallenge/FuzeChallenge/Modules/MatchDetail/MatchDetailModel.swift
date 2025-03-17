@@ -7,7 +7,7 @@ struct MatchPlayerModel: Decodable {
 	let lastName: String
 	let nickname: String
 	let photo: URL?
-	let teamId: Int
+	let teamID: Int
 
 	private enum RootKeys: String, CodingKey {
 		case name = "first_name"
@@ -29,6 +29,6 @@ struct MatchPlayerModel: Decodable {
 		self.photo = try container.decodeIfPresent(URL.self, forKey: .photo)
 
 		let teamContainer = try container.nestedContainer(keyedBy: TeamKeys.self, forKey: .team)
-		self.teamId = try teamContainer.decode(Int.self, forKey: .id)
+		self.teamID = try teamContainer.decode(Int.self, forKey: .id)
 	}
 }
