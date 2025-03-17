@@ -18,7 +18,6 @@ enum RequestError: Error {
 class ApiService: ApiServiceProtocol {
 	private let session: URLSession
 	internal var autorizationToken: String {
-		//TODO: Remove fixed string
 		"mXd8AO-tg_mxlncpnTlIqVarlbVK_nwKn888SIxa59Ef2Te2PQ4"
 	}
 
