@@ -39,6 +39,16 @@ final class MatchViewModel: ObservableObject, Identifiable {
 	}
 }
 
+extension MatchViewModel: Hashable {
+	static func == (lhs: MatchViewModel, rhs: MatchViewModel) -> Bool {
+		lhs.leagueSerie == rhs.leagueSerie
+	}
+
+	var hashValue: Int {
+		leagueSerie.hashValue
+	}
+}
+
 final class MatchStatusViewModel: ObservableObject, Identifiable {
 	@Published var status: MatchStatus
 	private var date: String?
@@ -119,5 +129,11 @@ final class MatchListViewModel: ObservableObject, Identifiable {
 				state = .loaded
 			}
 			.store(in: &cancellables)
+	}
+}
+
+extension MatchListViewModel {
+	var matchDetailView: some View {
+		MatchDetailBuilder.build()
 	}
 }
