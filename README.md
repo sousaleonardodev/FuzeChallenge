@@ -58,6 +58,20 @@ FuzeChallengeTests
 FuzeChallengeTestsUI
 |
 ```
+## Modules implemented
+
+1. Splash screen
+2. Match list
+    - List matches from the current day
+    - Pull to refresh
+    - Date/ time convertion
+3. Match detail
+    - Match info
+    - Team Info 
+    - Players list
+4. State views
+    - Loading 
+    - Error
 
 ## Implementation decision
 1. Architecture choice:
