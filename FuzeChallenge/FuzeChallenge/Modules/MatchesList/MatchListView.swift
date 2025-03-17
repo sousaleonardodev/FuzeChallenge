@@ -171,10 +171,10 @@ struct MatchListView: View {
 				.refreshable {
 					viewModel.fetchMatches()
 				}
+				.navigationTitle("Partidas")
+				.environmentObject(themeManager)
+				.modifier(NavigationBarModifier(themeManager))
 			}
-			.navigationTitle("Partidas")
-			.environmentObject(themeManager)
-			.modifier(NavigationBarModifier(themeManager))
 			.navigationDestination(for: MatchViewModel.self) { _ in
 				self.viewModel.matchDetailView
 			}
