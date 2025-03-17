@@ -20,7 +20,7 @@ struct ErrorView: View {
 
 			VStack {
 				Spacer()
-				Text(message)
+				Text("Não foi possível carregar os dados.\nPor favor, tente novamente.")
 					.font(themeManager.currentTheme.fontBig)
 					.foregroundStyle(themeManager.currentTheme.textSecondary)
 					.lineLimit(2)
@@ -35,6 +35,9 @@ struct ErrorView: View {
 			}
 			.background(themeManager.currentTheme.background).ignoresSafeArea()
 			.padding()
+		}.onAppear {
+			// Tracking
+			print(message)
 		}
 	}
 }

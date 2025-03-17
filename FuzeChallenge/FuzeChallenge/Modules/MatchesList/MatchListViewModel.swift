@@ -3,7 +3,12 @@
 import SwiftUI
 import Combine
 
-final class TeamViewModel: ObservableObject, Identifiable {
+protocol TeamViewModelProtocol {
+	var name: String { get }
+	var image: URL? { get }
+}
+
+final class TeamViewModel: ObservableObject, Identifiable, TeamViewModelProtocol {
 	private let model: MatchTeamModel
 
 	var name: String {
@@ -23,7 +28,15 @@ final class TeamViewModel: ObservableObject, Identifiable {
 	}
 }
 
-final class MatchViewModel: ObservableObject, Identifiable {
+protocol MatchViewModelProtocol {
+	var leagueSerie: String { get }
+	var leagueImage: URL? { get }
+	var firstOpponent: TeamViewModel? { get }
+	var secondOpponent: TeamViewModel? { get }
+	var matchStatus: MatchStatusViewModel { get }
+}
+
+final class MatchViewModel: ObservableObject, Identifiable, MatchViewModelProtocol {
 	var leagueSerie: String {
 		"\(model.leagueName) \(model.serieName)".trimmingCharacters(in: .whitespacesAndNewlines)
 	}
@@ -62,6 +75,10 @@ extension MatchViewModel: Hashable {
 	}
 }
 
+protocol MatchStatusViewModelProtocol {
+	func getDate() -> String?
+}
+
 final class MatchStatusViewModel: ObservableObject, Identifiable {
 	@Published var status: MatchStatus
 	private var date: String?
@@ -93,7 +110,11 @@ final class MatchStatusViewModel: ObservableObject, Identifiable {
 	}
 }
 
-final class MatchListViewModel: ObservableObject, Identifiable {
+protocol MatchListViewModelProtocol {
+	func loadMatches()
+}
+
+final class MatchListViewModel: ObservableObject, Identifiable, MatchListViewModelProtocol {
 	enum State {
 		case loading
 		case loaded

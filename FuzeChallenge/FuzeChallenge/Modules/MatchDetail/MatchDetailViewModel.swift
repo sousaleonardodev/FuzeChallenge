@@ -3,7 +3,14 @@
 import Foundation
 import Combine
 
-final class MatchPlayerViewModel: ObservableObject, Identifiable {
+protocol MatchPlayerViewModelProtocol {
+	var name: String { get }
+	var nickname: String { get }
+	var photo: URL? { get }
+	var teamID: Int { get }
+}
+
+final class MatchPlayerViewModel: ObservableObject, Identifiable, MatchPlayerViewModelProtocol {
 	private let player: MatchPlayerModel
 
 	var name: String {
@@ -27,7 +34,12 @@ final class MatchPlayerViewModel: ObservableObject, Identifiable {
 	}
 }
 
-final class MatchDetailViewModel: ObservableObject, Identifiable {
+protocol MatchDetailViewModelProtocol {
+	var status: String { get }
+	func loadDetails()
+}
+
+final class MatchDetailViewModel: ObservableObject, Identifiable, MatchDetailViewModelProtocol {
 	enum State {
 		case loading
 		case loaded
