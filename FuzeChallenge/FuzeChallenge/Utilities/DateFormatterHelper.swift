@@ -48,8 +48,25 @@ final class DateFormatterHelper {
 		formatter.dateFormat = "EEE"
 
 		// Used to get day localized
-		formatter.locale = .current
+		formatter.locale = Locale(identifier: "pt_BR")
 
 		return formatter.string(from: date)
+	}
+
+	static func formatMatchDate(_ date: String?) -> String? {
+		guard let dateString = date,
+				let localDate = DateFormatterHelper.toLocalDate(dateString) else {
+			return nil
+		}
+
+		if localDate.isToday {
+			return "Hoje, " + DateFormatterHelper.toString(localDate, format: .timeShort)
+		} else if localDate.isTomorrow {
+			let weekDay = DateFormatterHelper.toWeekday(localDate).capitalized
+
+			return weekDay + ", " + DateFormatterHelper.toString(localDate, format: .timeShort)
+		}
+
+		return DateFormatterHelper.toString(localDate, format: .localShortFormat)
 	}
 }
