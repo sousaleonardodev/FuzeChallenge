@@ -87,6 +87,8 @@ final class MatchDetailViewModel: ObservableObject, Identifiable {
 				switch value {
 				case .failure(let error):
 					dataSource = []
+					secondTeamPlayers = []
+
 					state = .error(error)
 				case .finished:
 					break
@@ -95,11 +97,24 @@ final class MatchDetailViewModel: ObservableObject, Identifiable {
 				guard let self else {
 					return
 				}
-				dataSource = players
+				dividePlayersByTeam(players)
 				self.state = .loaded
 			}
 			.store(in: &cancellables)
+	}
 
+	private func dividePlayersByTeam(_ players: [MatchPlayerViewModel]) {
+		guard let firstTeam = self.firstTeam,
+			  let secondTeam = self.secondTeam else {
+			return
+		}
 
+		players.forEach { player in
+			if player.teamID == firstTeam.id {
+				dataSource.append(player)
+			} else {
+				secondTeamPlayers.append(player)
+			}
+		}
 	}
 }
