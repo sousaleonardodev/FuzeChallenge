@@ -143,6 +143,7 @@ struct MatchStatusView: View {
 struct MatchListView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
 	@ObservedObject private var viewModel: MatchListViewModel
+	@State private var navPath = NavigationPath()
 
 	var body: some View {
 		switch viewModel.state {
@@ -155,19 +156,29 @@ struct MatchListView: View {
 		case .loaded:
 			NavigationStack {
 				List(viewModel.datasource) { viewModel in
-					MatchView(viewModel: viewModel)
-						.listRowSeparator(.hidden)
+					ZStack {
+						NavigationLink(value: viewModel) {
+							EmptyView()
+						}
+
+						MatchView(viewModel: viewModel)
+					}
+					.listRowSeparator(.hidden)
+					.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+					.background(themeManager.currentTheme.background)
 				}
-				.listRowSpacing(12)
-				.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-				.listStyle(.plain)
+				.listRowSpacing(23)
 				.refreshable {
 					viewModel.fetchMatches()
 				}
-				.modifier(NavigationBarModifier(themeManager))
-				.navigationTitle("Partidas")
-				.environmentObject(themeManager)
 			}
+			.navigationTitle("Partidas")
+			.environmentObject(themeManager)
+			.modifier(NavigationBarModifier(themeManager))
+			.navigationDestination(for: MatchViewModel.self) { _ in
+				self.viewModel.matchDetailView
+			}
+			.scrollContentBackground(.hidden)
 		}
 	}
 
