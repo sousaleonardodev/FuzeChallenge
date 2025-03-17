@@ -48,8 +48,6 @@ FuzeChallenge/
 │    │   │__ LoadingView
 │    │   │__ ErrorView
 │    │
-│    │__ SharedViews/
-│    │
 │    │__ Modifiers/
 │
 │___ Utilities/
