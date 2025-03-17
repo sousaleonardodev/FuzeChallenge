@@ -4,38 +4,47 @@ import SwiftUI
 import Combine
 
 final class TeamViewModel: ObservableObject, Identifiable {
-	@Published var name: String = ""
-	@Published var image: URL?
+	private let model: MatchTeamModel
+
+	var name: String {
+		model.name
+	}
+
+	var image: URL? {
+		model.image
+	}
 
 	init(_ opponent: MatchTeamModel) {
-		self.name = opponent.name
-		self.image = opponent.image
+		self.model = opponent
 	}
 }
 
 final class MatchViewModel: ObservableObject, Identifiable {
-	@Published var leagueSerie: String
-	@Published var leagueImage: URL?
-	@Published var firstOpponent: TeamViewModel?
-	@Published var secondOpponent: TeamViewModel?
-	@Published var matchStatus: MatchStatusViewModel
+	var leagueSerie: String {
+		"\(model.leagueName) \(model.serieName)".trimmingCharacters(in: .whitespacesAndNewlines)
+	}
+
+	var leagueImage: URL? {
+		// Using thumb_ to optimize data consumption and rendering
+		model.leagueImageUrl?.insertingToLastPath("thumb_")
+	}
+
+	var firstOpponent: TeamViewModel? {
+		model.opponents.count > 0 ? TeamViewModel(model.opponents[0]) : nil
+	}
+
+	var secondOpponent: TeamViewModel? {
+		model.opponents.count > 1 ? TeamViewModel(model.opponents[1]) : nil
+	}
+
+	var matchStatus: MatchStatusViewModel {
+		MatchStatusViewModel(model.status, date: model.scheduledDate)
+	}
+
+	private let model: MatchModel
 
 	init(_ match: MatchModel) {
-		leagueSerie = match.leagueName + " " + match.serieName
-			.trimmingCharacters(in: .whitespacesAndNewlines)
-
-		// Using thumb_ to optimize data consumption and rendering
-		leagueImage = match.leagueImageUrl?.insertingToLastPath("thumb_")
-
-		if match.opponents.count > 0 {
-			firstOpponent = TeamViewModel(match.opponents[0])
-		}
-
-		if match.opponents.count > 1 {
-			secondOpponent = TeamViewModel(match.opponents[1])
-		}
-
-		matchStatus = .init(match.status, date: match.scheduledDate)
+		self.model = match
 	}
 }
 
@@ -91,41 +100,40 @@ final class MatchListViewModel: ObservableObject, Identifiable {
 	@Published var state: State = .loading
 
 	private var cancellables: Set<AnyCancellable> = []
+	private let matchlistService: MatchListServiceProtocol
 
-	private let matchFetcher: MatchListServiceProtocol
-
-	init(matchFetcher: MatchListServiceProtocol) {
-		self.matchFetcher = matchFetcher
-		self.fetchMatches()
+	init(matchService: MatchListServiceProtocol) {
+		self.matchlistService = matchService
+		loadMatches()
 	}
 
-	func fetchMatches() {
+	func loadMatches() {
 		datasource = []
 		state = .loading
 
-		matchFetcher.getMatches()
+		matchlistService.getMatches()
 			.map { response in
 				response.map(MatchViewModel.init)
 			}
 			.receive(on: DispatchQueue.main)
 			.sink { [weak self] value in
-				guard let self = self else {
+				guard let self else {
 					return
 				}
 
 				switch value {
 				case .failure(let error):
-					self.datasource = []
+					datasource = []
 					state = .error(error)
 				case .finished:
 					break
 				}
 			} receiveValue: { [weak self] matches in
-				guard let self = self else {
+				guard let self else {
 					return
 				}
 
-				self.datasource = matches
+				datasource = matches
 				state = .loaded
 			}
 			.store(in: &cancellables)
