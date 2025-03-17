@@ -143,13 +143,12 @@ struct MatchStatusView: View {
 struct MatchListView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
 	@ObservedObject private var viewModel: MatchListViewModel
-	@State private var navPath = NavigationPath()
 
 	var body: some View {
 		switch viewModel.state {
 		case .error(let error):
 			ErrorView(message: error.localizedDescription) {
-				viewModel.fetchMatches()
+				viewModel.loadMatches()
 			}
 		case.loading:
 			LoadingView()
@@ -169,13 +168,13 @@ struct MatchListView: View {
 				}
 				.listRowSpacing(23)
 				.refreshable {
-					viewModel.fetchMatches()
+					viewModel.loadMatches()
 				}
 				.navigationTitle("Partidas")
 				.environmentObject(themeManager)
 				.modifier(NavigationBarModifier(themeManager))
 				.navigationDestination(for: MatchViewModel.self) { _ in
-					self.viewModel.matchDetailView
+					viewModel.matchDetailView
 				}
 			}
 			.scrollContentBackground(.hidden)

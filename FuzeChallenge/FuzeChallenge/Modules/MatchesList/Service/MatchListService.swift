@@ -7,7 +7,7 @@ protocol MatchListServiceProtocol {
 	func getMatches() -> AnyPublisher<[MatchModel], RequestError>
 }
 
-class MatchListService: MatchListServiceProtocol {
+final class MatchListService: MatchListServiceProtocol {
 	private let apiService: ApiServiceProtocol
 
 	init(apiService: ApiServiceProtocol) {
