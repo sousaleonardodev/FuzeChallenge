@@ -44,6 +44,14 @@ struct MatchModel: Decodable {
 
 		opponents = try container.decode([MatchTeamModel].self, forKey: .opponents)
 	}
+
+	func getOpponentIDs() -> (Int, Int)? {
+		guard opponents.count > 1 else {
+			return nil
+		}
+
+		return (opponents[0].id, opponents[1].id)
+	}
 }
 
 struct MatchTeamModel: Decodable {

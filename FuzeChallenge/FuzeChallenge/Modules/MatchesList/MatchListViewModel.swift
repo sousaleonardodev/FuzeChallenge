@@ -41,7 +41,7 @@ final class MatchViewModel: ObservableObject, Identifiable {
 		MatchStatusViewModel(model.status, date: model.scheduledDate)
 	}
 
-	private let model: MatchModel
+	internal let model: MatchModel
 
 	init(_ match: MatchModel) {
 		self.model = match
@@ -141,7 +141,7 @@ final class MatchListViewModel: ObservableObject, Identifiable {
 }
 
 extension MatchListViewModel {
-	var matchDetailView: some View {
-		MatchDetailBuilder.build()
+	func matchDetailView(for match: MatchViewModel) -> some View {
+		MatchDetailBuilder.build(match: match.model)
 	}
 }

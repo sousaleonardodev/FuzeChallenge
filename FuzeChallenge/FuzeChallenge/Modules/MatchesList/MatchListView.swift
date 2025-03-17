@@ -173,8 +173,8 @@ struct MatchListView: View {
 				.navigationTitle("Partidas")
 				.environmentObject(themeManager)
 				.modifier(NavigationBarModifier(themeManager))
-				.navigationDestination(for: MatchViewModel.self) { _ in
-					viewModel.matchDetailView
+				.navigationDestination(for: MatchViewModel.self) { matchViewModel in
+					viewModel.matchDetailView(for: matchViewModel)
 				}
 			}
 			.scrollContentBackground(.hidden)
