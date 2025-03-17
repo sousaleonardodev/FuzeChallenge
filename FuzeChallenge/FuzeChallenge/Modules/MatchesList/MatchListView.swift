@@ -5,6 +5,7 @@ import Combine
 
 struct MatchView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
+
 	private var viewModel: MatchViewModel
 
 	init(viewModel: MatchViewModel) {
@@ -41,6 +42,7 @@ struct MatchView: View {
 
 struct LeagueInfoView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
+
 	private let leagueName: String
 	private let leagueImageURL: URL?
 
@@ -78,8 +80,9 @@ struct LeagueInfoView: View {
 
 struct TeamView: View {
 	@EnvironmentObject private var themeManager: ThemeManager
-	private let viewModel: TeamViewModel
 
+	private let viewModel: TeamViewModel
+	
 	init(viewModel: TeamViewModel) {
 		self.viewModel = viewModel
 	}
@@ -148,26 +151,36 @@ struct MatchListView: View {
 		switch viewModel.state {
 		case .error(let error):
 			ErrorView(message: error.localizedDescription) {
-				viewModel.fetchMatches()
+				viewModel.loadMatches()
 			}
 		case.loading:
 			LoadingView()
 		case .loaded:
 			NavigationStack {
 				List(viewModel.datasource) { viewModel in
-					MatchView(viewModel: viewModel)
-						.listRowSeparator(.hidden)
+					ZStack {
+						NavigationLink(value: viewModel) {
+							EmptyView()
+						}
+
+						MatchView(viewModel: viewModel)
+					}
+					.listRowSeparator(.hidden)
+					.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+					.background(themeManager.currentTheme.background)
 				}
-				.listRowSpacing(12)
-				.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-				.listStyle(.plain)
+				.listRowSpacing(23)
 				.refreshable {
-					viewModel.fetchMatches()
+					viewModel.loadMatches()
 				}
-				.modifier(NavigationBarModifier(themeManager))
 				.navigationTitle("Partidas")
 				.environmentObject(themeManager)
+				.modifier(NavigationBarModifier(themeManager))
+				.navigationDestination(for: MatchViewModel.self) { matchViewModel in
+					viewModel.matchDetailView(for: matchViewModel)
+				}
 			}
+			.scrollContentBackground(.hidden)
 		}
 	}
 
