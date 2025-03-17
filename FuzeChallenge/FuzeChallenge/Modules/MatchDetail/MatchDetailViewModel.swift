@@ -31,17 +31,26 @@ final class MatchDetailViewModel: ObservableObject, Identifiable {
 	}
 
 	@Published var state: State = .loading
+	@Published var dataSource: [MatchPlayerViewModel] = []
 
 	private var cancellables: Set<AnyCancellable> = []
 	private let matchDetailService: MatchDetailServiceProtocol
 
-	init(service: MatchDetailServiceProtocol) {
+	private let match: MatchModel
+
+	init(service: MatchDetailServiceProtocol, match: MatchModel) {
 		self.matchDetailService = service
+		self.match = match
 	}
 
 	func loadDetails() {
 		state = .loading
-		matchDetailService.getPlayersFor(firstTeam: 126944, secondTeam: 133542)
+		guard let opponentsID = match.getOpponentIDs() else {
+			state = .error(NSError(domain: "", code: 0, userInfo: nil))
+			return
+		}
+
+		matchDetailService.getPlayersFor(firstTeam: opponentsID.0, secondTeam: opponentsID.1)
 			.map { response in
 				response.map(MatchPlayerViewModel.init)
 			}
@@ -53,6 +62,7 @@ final class MatchDetailViewModel: ObservableObject, Identifiable {
 
 				switch value {
 				case .failure(let error):
+					dataSource = []
 					state = .error(error)
 				case .finished:
 					break
@@ -61,7 +71,7 @@ final class MatchDetailViewModel: ObservableObject, Identifiable {
 				guard let self else {
 					return
 				}
-
+				dataSource = players
 				self.state = .loaded
 			}
 			.store(in: &cancellables)
