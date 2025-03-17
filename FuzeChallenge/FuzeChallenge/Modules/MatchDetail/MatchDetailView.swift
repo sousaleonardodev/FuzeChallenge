@@ -53,6 +53,7 @@ struct MatchDetailView: View {
 						.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
 					}
 				}
+				.offset(y: 10)
 				.listRowSpacing(12)
 				.listStyle(PlainListStyle())
 				.listRowBackground(themeManager.currentTheme.background)
